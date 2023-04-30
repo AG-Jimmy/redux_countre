@@ -1,9 +1,18 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import { useSelector,useDispatch } from 'react-redux'
+import { handelLogout,handelLogIn } from '@/store/reducers/authSlice'
+import { increment,decrement } from '@/store/reducers/counter'
 
 
 export default function Home() {
-  const [count,setCount] = useState(0)
+
+
+
+const dispatch =useDispatch()
+const isLogIn=useSelector(state =>state.auth.isLogIn)
+const count=useSelector(state =>state.counter.value)
+
+// console.log(count);
 
   return (
     <>
@@ -15,10 +24,23 @@ export default function Home() {
       </Head>
 
       <center >
+       {isLogIn ?(
+          <>
+         <button 
+         onClick={()=>dispatch(handelLogout())}
+         style={{width:150}}>
+           logout </button>
+         <h5>name</h5>
+         </>       
+       ):(
+        <button 
+        onClick={()=>dispatch(handelLogIn()) }
+        style={{width:150}}> login </button>
+       )}
              <b> <h1> Counter </h1> </b>
                  <b> <span> {count} </span> </b>
-          <button  onClick={()=>  setCount(count+1)} ><b>  + </b></button>
-          <button  onClick={()=> setCount(count-1)}><b>  - </b></button>
+          <button  onClick={()=>  dispatch(increment(1))} ><b>  + </b></button>
+          <button  onClick={()=> dispatch(decrement(1))}><b>  - </b></button>
       </center>
 
     </>
